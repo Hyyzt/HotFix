@@ -125,8 +125,6 @@ class WindowFloatingView : RelativeLayout {
     private fun updateViewPosition() {
         mLayoutParams!!.x = (xInScreen - xInView).toInt()
         mLayoutParams!!.y = (yInScreen - yInView).toInt()
-        Log.e(TAG, "updateViewPosition: " + xInScreen + "," + xInView)
-        Log.e(TAG, "updateViewPosition: " + yInScreen + "," + yInView)
         mWindowManager!!.updateViewLayout(this, mLayoutParams)
     }
 

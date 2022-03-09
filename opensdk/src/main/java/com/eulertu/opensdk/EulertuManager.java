@@ -1,7 +1,6 @@
 package com.eulertu.opensdk;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.provider.Settings;
@@ -9,9 +8,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.eulertu.opensdk.view.MoveByTouchView;
 import com.eulertu.opensdk.view.TestTouchView;
-import com.eulertu.opensdk.view.WindowFloatingView;
 
 public
 class EulertuManager {
