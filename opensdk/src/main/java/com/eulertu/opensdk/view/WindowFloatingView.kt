@@ -60,6 +60,7 @@ class WindowFloatingView : RelativeLayout {
         val localDisplayMetrics = DisplayMetrics()
         mWindowManager?.defaultDisplay
             ?.getMetrics(localDisplayMetrics)
+        Log.e(TAG, "init: ${localDisplayMetrics.heightPixels} , ${localDisplayMetrics.widthPixels}" )
         pixelHeight = localDisplayMetrics.heightPixels
         if (pixelHeight in 672..720) {
             pixelHeight = 720
@@ -68,7 +69,7 @@ class WindowFloatingView : RelativeLayout {
         if (pixelWidth == 1920) {
             pixelHeight = 1080
         }
-        LayoutInflater.from(context).inflate(R.layout.opensdk_demo_test_touch, this, true)
+        LayoutInflater.from(context).inflate(R.layout.opensdk_demo_test_touch, this)
     }
 
     fun updateViewLayoutParams(params: WindowManager.LayoutParams?) {
@@ -107,11 +108,13 @@ class WindowFloatingView : RelativeLayout {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_UP -> {
+                xInView = 0f
+                yInView = 0f
                 isIntercept = false
                 if (Math.abs(xDownInScreen - xInScreen) < JUST_CLICK && Math.abs(yDownInScreen - yInScreen) < JUST_CLICK) {
-                    return false
+                    return true
                 }
-//                showAnimation()
+                showAnimation()
             }
             MotionEvent.ACTION_MOVE -> {
                 xInScreen = event.rawX

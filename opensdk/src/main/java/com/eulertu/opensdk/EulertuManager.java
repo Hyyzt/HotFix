@@ -8,7 +8,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.eulertu.opensdk.view.TestTouchView;
+import com.eulertu.opensdk.view.WindowFloatingView;
 
 public
 class EulertuManager {
@@ -51,7 +51,7 @@ class EulertuManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(mContext)) {
                 WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-                TestTouchView moveByTouchView = new TestTouchView(mContext);
+                WindowFloatingView moveByTouchView = new WindowFloatingView(mContext);
                 WindowManager.LayoutParams mFloatingViewParams;
                 mFloatingViewParams = new WindowManager.LayoutParams();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0
@@ -66,12 +66,13 @@ class EulertuManager {
                 mFloatingViewParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-                mFloatingViewParams.gravity = Gravity.LEFT & Gravity.TOP;
-                mFloatingViewParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                mFloatingViewParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+                mFloatingViewParams.gravity = Gravity.LEFT | Gravity.TOP;
+                mFloatingViewParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+                mFloatingViewParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
                 mFloatingViewParams.x = 0;
                 mFloatingViewParams.y = 0;
-//                moveByTouchView.updateViewLayoutParams(mFloatingViewParams);
+                moveByTouchView.updateViewLayoutParams(mFloatingViewParams);
+                moveByTouchView.setLayoutParams(mFloatingViewParams);
                 try {
                     windowManager.addView(moveByTouchView, mFloatingViewParams);
                 } catch (Exception e) {
