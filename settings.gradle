@@ -1,2 +1,2 @@
-include ':app'
-include ':opensdk'
+include ':app', ':opensdk'
+include ':sdk-ht'

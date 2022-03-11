@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/showFloat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="show float"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="show float" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/init_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第一步：初始化业务sdk"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <Button
+        android:id="@+id/call_bug_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第二步：调用有bug业务sdk方法" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="注：很明显在无补丁的情况下，第二步调用有bug的方法引起了崩溃" />
+
+    <Button
+        android:id="@+id/fix_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第三步：调用hotfix-sdk请求补丁" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="注：延迟初始化，避免一进来就初始化会把补丁给打上，看不到效果，再调用下有bug的业务sdk方法试试" />
+</LinearLayout>

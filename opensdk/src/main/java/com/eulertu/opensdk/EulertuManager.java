@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.eulertu.opensdk.view.WindowFloatingView;
-import com.eulertu.opensdk.view.WindowFloatingViewJava;
 
 public
 class EulertuManager {
@@ -52,7 +51,7 @@ class EulertuManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(mContext)) {
                 WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-                WindowFloatingViewJava moveByTouchView = new WindowFloatingViewJava(mContext);
+                WindowFloatingView moveByTouchView = new WindowFloatingView(mContext);
                 WindowManager.LayoutParams mFloatingViewParams;
                 mFloatingViewParams = new WindowManager.LayoutParams();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0

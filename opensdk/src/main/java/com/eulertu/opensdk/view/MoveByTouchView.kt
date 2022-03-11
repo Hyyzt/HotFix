@@ -2,13 +2,13 @@ package com.eulertu.opensdk.view
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import java.lang.Math.abs
 
 class MoveByTouchView @JvmOverloads constructor(
