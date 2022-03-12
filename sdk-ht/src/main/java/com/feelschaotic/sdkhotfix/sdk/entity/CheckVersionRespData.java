@@ -73,7 +73,7 @@ public class CheckVersionRespData {
     public boolean patchCanLoad() {
         int index = packagename.lastIndexOf("_");
         return patchPath != null && !patchPath.isEmpty()
-                && HotfixManager.config.getAppVersion().equals(packagename.substring(index + 1, packagename.length()))
+                && HotfixManager.config.getAppVersion().equals(packagename.substring(index + 1))
                 && HotfixManager.config.getPackageName().equals(packagename.substring(0, index));
     }
 }

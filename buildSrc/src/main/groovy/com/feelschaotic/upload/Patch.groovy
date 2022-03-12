@@ -39,7 +39,8 @@ class Patch {
 
     Patch(Project project) {
         version = project.properties.get("patchVersion")
-        bundlename = project.properties.get("sdkPackageName") + "_" + version
+        bundlename = project.properties.get("sdkPackageName") + "_" +
+                project.properties.get("SDK_ARTIFACT_ID") + "_" + version
         packagename = bundlename
         bundledescribe = project.properties.get("patchDesc")
         //转码
