@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONException
 import com.alibaba.fastjson.JSONObject
 import com.feelschaotic.sdkhotfix.sdk.BuildConfig
 import com.feelschaotic.sdkhotfix.sdk.HotfixManager
-import com.feelschaotic.sdkhotfix.sdk.entity.CheckVersionRespData
+import com.feelschaotic.sdkhotfix.sdk.entity.CheckVersionRespData;
 import com.feelschaotic.sdkhotfix.sdk.entity.DownloadRequest
 import com.feelschaotic.sdkhotfix.sdk.statistics.StatisticsConstants
 import com.feelschaotic.sdkhotfix.sdk.statistics.StatisticsManager
@@ -43,7 +43,7 @@ object ServiceManager {
             .add("Content-Type", "application/json")
             .build()
 
-        patchService.checkVersion(BuildConfig.HOTFIX_SERVER_URL + "checkversion",
+        patchService.checkVersion(BuildConfig.HOTFIX_SERVER_URL_GET,
             headers,
             map,
             object : RespondListener<String> {
@@ -69,17 +69,21 @@ object ServiceManager {
 
                     val resultJsonObj = JSON.parse(jsonObj.getString("result")) as JSONObject
                     val dataArray = resultJsonObj.getJSONArray("data")
-                    if (dataArray == null || dataArray.isEmpty() || CODE_SUCCESS != resultJsonObj.getIntValue("code")) {
+                    if (dataArray == null || dataArray.isEmpty() ) {
                         LogUtils.d(TAG, "没有补丁信息")
                         return
                     }
-                    val respData = JSONObject.toJavaObject(dataArray[0] as JSONObject,
-                        CheckVersionRespData::class.java)
+                    val respData = JSONObject.toJavaObject(
+                        dataArray[0] as JSONObject,
+                        CheckVersionRespData::class.java
+                    )
                     LogUtils.d(TAG, "有补丁，开始比较")
-                    StatisticsManager.track(StatisticsConstants.EventCode.CODE_REQUEST_NEW_PATCH,
+                    StatisticsManager.track(
+                        StatisticsConstants.EventCode.CODE_REQUEST_NEW_PATCH,
                         null,
                         null,
-                        respData.bundleversion.toString())
+                        respData.bundleversion.toString()
+                    )
                     onCheckVersionListener?.invoke(respData)
                 }
 

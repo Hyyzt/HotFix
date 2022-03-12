@@ -53,6 +53,9 @@ public class CheckVersionRespData {
     @JSONField(name = "patchPath")
     public String patchPath;
 
+    //服务端patch地址
+    public String patchFile;
+
     /**
      * 进行版本比对
      */

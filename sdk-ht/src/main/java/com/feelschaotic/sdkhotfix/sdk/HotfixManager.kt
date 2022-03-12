@@ -8,6 +8,7 @@ import com.feelschaotic.sdkhotfix.sdk.statistics.StatisticsConstants
 import com.feelschaotic.sdkhotfix.sdk.statistics.StatisticsManager
 import com.feelschaotic.sdkhotfix.sdk.utils.LogUtils
 import com.feelschaotic.sdkhotfix.sdk.utils.PPSharePreferenceHelper
+import com.liulishuo.filedownloader.FileDownloader
 import com.meituan.robust.RollbackListener
 import com.meituan.robust.RollbackManager
 import java.lang.ref.WeakReference
@@ -27,6 +28,7 @@ object HotfixManager {
     lateinit var config: HotfixConfig
     private lateinit var rollBacks: MutableMap<String, Boolean>
     private const val TAG = "sdk-patch"
+
     /**
      * 初始化，检查是否有补丁
      */
@@ -36,6 +38,7 @@ object HotfixManager {
         HotfixManager.config.checkConfig()
         initRollbackListener()
         PatchManager.loadPatch()
+        FileDownloader.setupOnApplicationOnCreate(application)
     }
 
     private fun initRollbackListener() {
@@ -48,24 +51,41 @@ object HotfixManager {
         rollBacks = if (rollBacksJsonStr.isNullOrEmpty()) {
             mutableMapOf()
         } else {
-            JSON.parseObject(rollBacksJsonStr, MutableMap::class.java) as MutableMap<String, Boolean>
+            JSON.parseObject(
+                rollBacksJsonStr,
+                MutableMap::class.java
+            ) as MutableMap<String, Boolean>
         }
 
         RollbackManager.getInstance().setRollbackListener(object : RollbackListener {
             override fun onRollback(methodsId: String, methodsLongName: String, e: Throwable?) {
-                StatisticsManager.track(StatisticsConstants.EventCode.CODE_ON_CATCH, methodsLongName, methodsId, e?.localizedMessage)
+                StatisticsManager.track(
+                    StatisticsConstants.EventCode.CODE_ON_CATCH,
+                    methodsLongName,
+                    methodsId,
+                    e?.localizedMessage
+                )
                 LogUtils.e(TAG, "补丁$methodsId 发生异常，执行回滚！")
 
                 rollBacks[methodsId] = true
                 getApplication()?.let {
-                    PPSharePreferenceHelper.putString(it, Const.SP_KEY_PATCH_ROLLBACK, JSON.toJSONString(rollBacks))
+                    PPSharePreferenceHelper.putString(
+                        it,
+                        Const.SP_KEY_PATCH_ROLLBACK,
+                        JSON.toJSONString(rollBacks)
+                    )
                 }
             }
 
             override fun getRollback(methodsId: String): Boolean {
                 val rollback = rollBacks[methodsId] ?: false
                 LogUtils.d(TAG, "获取补丁$methodsId 的回滚状态为：$rollback")
-                StatisticsManager.track(StatisticsConstants.EventCode.CODE_ROLLBACK_STATE, null, methodsId, rollback.toString())
+                StatisticsManager.track(
+                    StatisticsConstants.EventCode.CODE_ROLLBACK_STATE,
+                    null,
+                    methodsId,
+                    rollback.toString()
+                )
                 return rollback
             }
         })
@@ -81,7 +101,11 @@ object HotfixManager {
     fun notifyPatchUpdated() {
         getApplication()?.let {
             rollBacks.clear()
-            PPSharePreferenceHelper.putString(it, Const.SP_KEY_PATCH_ROLLBACK, JSON.toJSONString(rollBacks))
+            PPSharePreferenceHelper.putString(
+                it,
+                Const.SP_KEY_PATCH_ROLLBACK,
+                JSON.toJSONString(rollBacks)
+            )
         }
     }
 

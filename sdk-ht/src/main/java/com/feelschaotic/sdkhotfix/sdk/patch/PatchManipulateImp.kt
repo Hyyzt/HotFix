@@ -75,7 +75,7 @@ class PatchManipulateImp(private val mPatchInfo: CheckVersionRespData,
         // 由于是异步的网络下载补丁，所以使用CountDownLatch进行同步
         val mCountDownLatch = CountDownLatch(1)
 
-        ServiceManager.downloadPatch(mPatchInfo.bundleurl, PATCH_LOCAL_PATH, PATCH_NAME, object : RespondListener<String> {
+        ServiceManager.downloadPatch(mPatchInfo.patchFile, PATCH_LOCAL_PATH, PATCH_NAME, object : RespondListener<String> {
             override fun onSuccess(response: String) {
                 StatisticsManager.track(StatisticsConstants.EventCode.CODE_DOWNLOAD_SUCCESS, mPatchInfo.bundleurl)
                 LogUtils.d(TAG, "下载补丁成功，response:$response")
@@ -126,8 +126,8 @@ class PatchManipulateImp(private val mPatchInfo: CheckVersionRespData,
         try {
             val decryptKey = EncryptManager.getInstance().decryptByRsaPrivateKey(Base64.decode(pKey, Base64.NO_WRAP))
             val fileBytes = ByteUtil.fileToBytes(patchPath) ?: return
-            //val decryptBytes = AESUtil.decryptByAes(fileBytes, decryptKey)
-            ByteUtil.bytesToFile(fileBytes, PATCH_CACHE_PATH, "patch_temp.jar")
+            val decryptBytes = AESUtil.decryptByAes(fileBytes, decryptKey)
+            ByteUtil.bytesToFile(decryptBytes, PATCH_CACHE_PATH, "patch_temp.jar")
         } catch (e: java.lang.Exception) {
             LogUtils.e(TAG, "【警告】解密失败！！")
             LogUtils.printError(e)
