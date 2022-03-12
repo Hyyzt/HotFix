@@ -16,7 +16,8 @@ class BuildConfigUtil {
     String getDebugBuildType(String key) {
         for (def type : project.android.buildTypes) {
             if (type.debuggable == true) {
-                return type.getBuildConfigFields()[key].getProperties().get("value").replace("\"", "")
+                String result = type.getBuildConfigFields()[key].getProperties().get("value")
+                return result.replace("\"", "")
             }
         }
         return ""
@@ -25,7 +26,9 @@ class BuildConfigUtil {
     String getReleaseBuildType(String key) {
         for (def type : project.android.buildTypes) {
             if (type.debuggable == false) {
-                return type.getBuildConfigFields()[key].getProperties().get("value").replace("\"", "")
+                String result = type.getBuildConfigFields()[key].getProperties().get("value")
+                print(result)
+                return result.replace("\"", "")
             }
         }
         return ""

@@ -3,8 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
-// 加载上传插件，随便放在哪个依赖下，有个宿主即可
-apply plugin: com.feelschaotic.upload.UploadPatchPlugin
 
 android {
     compileSdkVersion 27

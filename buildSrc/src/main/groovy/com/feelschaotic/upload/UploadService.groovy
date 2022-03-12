@@ -5,6 +5,7 @@ import com.aliyun.oss.ClientException
 import com.aliyun.oss.OSSClient
 import com.aliyun.oss.ServiceException
 import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 
 import java.util.concurrent.TimeUnit
 
@@ -12,24 +13,34 @@ class UploadService {
     OkHttpClient client
 
     UploadService() {
+        HttpLoggingInterceptor log = new HttpLoggingInterceptor()
+        log.level = HttpLoggingInterceptor.Level.BODY
         client = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(log)
                 .build()
     }
 
-    def updatePatchInfo(Config config, Patch patchInfo, OnResponseListener<String> listener) {
+    def updatePatchInfo(Config config, Patch patchInfo, String fileName, OnResponseListener<String> listener) {
         try {
             def requestJson = JSON.toJSONString(patchInfo)
-
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("patchFile", fileName,
+                            RequestBody.create(MediaType.parse("multipart/form-data"), new File(fileName)))
+                    .addFormDataPart("version", String.valueOf(patchInfo.version))
+                    .addFormDataPart("fromSystem", String.valueOf(patchInfo.fromSystem))
+                    .addFormDataPart("toDate", String.valueOf(patchInfo.toDate))
+                    .addFormDataPart("fromDate", String.valueOf(patchInfo.fromDate))
+                    .addFormDataPart("size", String.valueOf(new File(fileName).size()))
+                    .build()
             def request = new Request.Builder()
                     .url(config.serverUrl)
                     .header("X-Bmob-Application-Id", config.applicationId)
                     .header("X-Bmob-REST-API-Key", config.restApiKey)
-                    .header("Content-Type", "application/json")
-                    .post(RequestBody.create(MediaType.get("application/json; charset=utf-8"), requestJson)).build()
-            println "--发起请求 url:${config.serverUrl} \n requestJson:${requestJson}"
+                    .post(requestBody).build()
             def response = client.newCall(request).execute()
             if (listener != null) {
                 listener.onSuccess(response.body().string())
@@ -39,29 +50,6 @@ class UploadService {
                 listener.onError(e)
             }
         }
-    }
-
-    def uploadPatchToAliYun(OssConfig ossConfig, File patchFile, OnResponseListener<String> listener) {
-        OSSClient ossClient = new OSSClient(ossConfig.endpoint, ossConfig.accessKeyId, ossConfig.accessKeySecret)
-
-        println "--开始上传补丁 patchPath:${patchFile.path}"
-        def objectName = System.currentTimeMillis() + "-android"
-        try {
-            def putResult = ossClient.putObject(ossConfig.buckName, objectName, patchFile)
-            println "--上传补丁成功 ETag:${putResult.getETag()};RequestId:${putResult.getRequestId()}"
-            if (listener != null) {
-                listener.onSuccess(objectName)
-            }
-        } catch (ClientException e) {
-            if (listener != null) {
-                listener.onError(e)
-            }
-        } catch (ServiceException e) {
-            if (listener != null) {
-                listener.onError(e)
-            }
-        }
-        ossClient.shutdown()
     }
 }
 
