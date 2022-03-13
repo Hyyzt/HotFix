@@ -38,7 +38,6 @@ class UploadService {
                     .addFormDataPart("pKey", String.valueOf(patchInfo.pKey))
                     .addFormDataPart("bundledescribe", String.valueOf(patchInfo.bundledescribe))
                     .addFormDataPart("bundlename", String.valueOf(patchInfo.bundlename))
-                    .addFormDataPart("pKey", String.valueOf(patchInfo.pKey))
                     .addFormDataPart("packagename", String.valueOf(patchInfo.packagename))
                     .addFormDataPart("platform", "android")
                     .addFormDataPart("bundleurl", String.valueOf(patchInfo.bundleurl))

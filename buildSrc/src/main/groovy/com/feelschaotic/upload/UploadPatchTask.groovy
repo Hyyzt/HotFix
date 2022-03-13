@@ -43,11 +43,13 @@ class UploadPatchTask extends DefaultTask {
     }
 
     def encryptPatch() {
+        //pkey
         def clientAesKey = new EncryptUtil().getRandomString(16)
         println "--clientAesKey: ${clientAesKey}"
-
+        //用pKey加密文件
         byte[] encryptBytes = EncryptManager.getInstance().encryptByAes(byteUtil.fileToBytes(patchPath), clientAesKey.getBytes())
         byteUtil.bytesToFile(encryptBytes, rootDir, patchName)
+        //在加密pKey
         def encryptAesKey = EncryptManager.getInstance().encryptByRsaPublicKey(clientAesKey.getBytes())
         uploadPatchToAliYun(new String(Base64.encoder.encode(encryptAesKey)))
     }
