@@ -101,26 +101,30 @@ android {
 uploadArchives {
     repositories {
         mavenDeployer {
-            snapshotRepository(url: MAVEN_REPO_RELEASE_URL) {
-                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
-            }
-            repository(url: MAVEN_REPO_RELEASE_URL) {
-                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
-            }
-            // 接入第一步，抽取你的uploadArchives配置
-            pom.project {
-                version SDK_VERSION
-                artifactId SDK_ARTIFACT_ID
-                groupId GROUP_ID
-                packaging TYPE
-                description DESCRIPTION
-            }
+//            snapshotRepository(url: MAVEN_REPO_RELEASE_URL) {
+//                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+//            }
+//            repository(url: MAVEN_REPO_RELEASE_URL) {
+//                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+//            }
+//            // 接入第一步，抽取你的uploadArchives配置
+//            pom.project {
+//                version SDK_VERSION
+//                artifactId SDK_ARTIFACT_ID
+//                groupId GROUP_ID
+//                packaging TYPE
+//                description DESCRIPTION
+//            }
+            repository(url: "file://C://Users/m1505/AndroidProjects/.m2/repository/")
+            pom.version = SDK_VERSION
+            pom.artifactId = SDK_ARTIFACT_ID
+            pom.groupId = GROUP_ID
         }
     }
 }
 
 dependencies {
-    api project(path: ':sdk-ht')
+    api 'com.feelschaotic.sdkhotfix:Custom:1.0.0'
     // implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:27.1.1'

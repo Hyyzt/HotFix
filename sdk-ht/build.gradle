@@ -59,6 +59,18 @@ android {
     }
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://C://Users/m1505/AndroidProjects/.m2/repository/")
+            pom.version = "1.0.0"
+            pom.packaging = "aar"
+            pom.artifactId = "Custom"
+            pom.groupId = "com.feelschaotic.sdkhotfix"
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
