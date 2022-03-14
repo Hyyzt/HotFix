@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 apply plugin: com.feelschaotic.upload.UploadPatchPlugin
+apply plugin: 'com.github.dcendents.android-maven'
 //apply from: rootProject.file('gradle/gradle_mvn_push.gradle')
 
 android {
@@ -62,7 +63,7 @@ android {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file://C://Users/m1505/AndroidProjects/.m2/repository/")
+//            repository(url: "file://C://Users/m1505/AndroidProjects/.m2/repository/")
             pom.version = "1.0.0"
             pom.packaging = "aar"
             pom.artifactId = "Custom"
